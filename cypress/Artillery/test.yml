@@ -19,9 +19,7 @@ scenarios:
           url: "{{ target }}get"
       - post:
           url: "{{ target }}post"
-          # json:
-          #   username: "Test User"
-          #   password: "Temp Password"
+         
           capture:
             - json: "$.json"
               as: "request_body"
