@@ -1,39 +1,50 @@
-describe('HTTP PUT and DELETE Example', () => {
-  const apiUrl = 'https://jsonplaceholder.typicode.com/posts';
+describe('template spec', () => {
 
-  it('should update a post using PUT', () => {
-    cy.request({
-      method: 'PUT',
-      url: `${apiUrl}/1`,
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8'
-      },
-      body: {
-        id: 1,
-        title: 'Updated Title',
-        body: 'This is the updated body content.',
-        userId: 1
-      }
-    }).then((response) => {
-      // Sprawdzamy, czy status odpowiedzi to 200
-      expect(response.status).to.eq(200);
+  it('POST request', () => {
+  cy.request({method: 'POST', url: 'https://httpbin.org/post', 
+  qs: {
+  "username": "Bingo"
+    }
 
-      // Sprawdzamy, czy odpowiedź zawiera zaktualizowane dane
-      expect(response.body).to.have.property('title', 'Updated Title');
-      expect(response.body).to.have.property('body', 'This is the updated body content.');
-    });
-  });
+}).then((response) =>{
+  expect(response.status).to.eq(200)
+  assert.equal("Bingo",response.body.args.username)
+   })
+  })
 
-  it('should delete a post using DELETE', () => {
-    cy.request({
-      method: 'DELETE',
-      url: `${apiUrl}/1`
-    }).then((response) => {
-      // Sprawdzamy, czy status odpowiedzi to 200
-      expect(response.status).to.eq(200);
-
-      // JSONPlaceholder zwraca pusty obiekt po udanym usunięciu
-      expect(response.body).to.be.empty;
-    });
-  });
-});
+  it('PUT request', () => {
+    cy.request({method: 'PUT', url: 'https://httpbin.org/put',
+  qs: {
+  "username": "Angel",
+    }
+  }).then((response) =>{
+   expect(response.status).to.eq(200)
+  assert.equal("Angel",response.body.args.username)
+  })
+  })
+  it('PATCH request', () => {
+  
+  cy.request({method: 'PATCH', url: 'https://httpbin.org/patch', 
+  qs: {
+  "username": "Bravo",
+  }
+}).then((response) =>{
+  expect(response.status).to.eq(200)
+  assert.equal("Bravo",response.body.args.username)
+  })
+  })
+  
+  it('DELETE request', () => {
+  cy.request({method: 'DELETE', url: 'https://httpbin.org/delete'}).then((response) =>{
+  expect(response.status).to.eq(200)
+  })
+  })
+  
+  it('BAD address',() => {
+  cy.request({method: 'GET', url: 'https://httpbin.org/non-existing-url',
+      failOnStatusCode: false}
+    ).then((response) =>{
+  expect(response.status).to.eq(404)
+  })
+})
+})
